@@ -16,6 +16,7 @@ GitOps CLI is a command line interface (CLI) to perform operations on GitOps man
 The official GitOps CLI Docker image comes with all dependencies pre-installed and ready-to-use. Pull it with:
 ```bash
 docker pull baloise/gitopscli
+
 ```
 Start the CLI and the print the help page with:
 ```bash

@@ -77,7 +77,12 @@ class DeployCommand(Command):
         updated_values = {}
         for key, value in args.values.items():
             try:
-                updated_value = update_yaml_file(full_file_path, key, value)
+                try:
+                    for inner_key, inner_value in dict(value).items():
+                        inner_key = key + "." + inner_key
+                        updated_value = update_yaml_file(full_file_path, inner_key, inner_value)
+                except ValueError:
+                    updated_value = update_yaml_file(full_file_path, key, value)
             except (FileNotFoundError, IsADirectoryError) as ex:
                 raise GitOpsException(f"No such file: {args.file}") from ex
             except YAMLException as ex:
@@ -89,11 +94,19 @@ class DeployCommand(Command):
                 logging.info("Yaml property %s already up-to-date", key)
                 continue
 
-            logging.info("Updated yaml property %s to %s", key, value)
-            updated_values[key] = value
+            try:
+                for inner_key, inner_value in dict(value).items():
+                    inner_key = key + "." + inner_key
+                    logging.info("Updated yaml property %s to %s", inner_key, inner_value)
+                    updated_values[inner_key] = inner_value
+                    if not single_commit:
+                        self.__commit(git_repo, f"changed '{inner_key}' to '{inner_value}' in {args.file}")
+            except ValueError:
+                logging.info("Updated yaml property %s to %s", key, value)
+                updated_values[key] = value
 
-            if not single_commit:
-                self.__commit(git_repo, f"changed '{key}' to '{value}' in {args.file}")
+                if not single_commit:
+                    self.__commit(git_repo, f"changed '{key}' to '{value}' in {args.file}")
 
         if single_commit and updated_values:
             if args.commit_message:

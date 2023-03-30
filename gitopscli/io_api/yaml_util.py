@@ -48,8 +48,12 @@ def update_yaml_file(file_path: str, key: str, value: Any) -> bool:
         raise KeyError(f"Key '{key}' is invalid JSONPath expression: {ex}!") from ex
     matches = jsonpath_expr.find(content)
     if not matches:
-        raise KeyError(f"Key '{key}' not found in YAML!")
-    if all(match.value == value for match in matches):
+        path = key.split(".")
+        content_copy = content
+        for i in path[:-1]:
+            content_copy = content_copy[i]
+        content_copy[path[-1]] = value
+    if all(match.value == value for match in matches) and matches:
         return False  # nothing to update
     try:
         jsonpath_expr.update(content, value)
@@ -64,7 +68,7 @@ def merge_yaml_element(file_path: str, element_path: str, desired_value: Any) ->
     work_path = yaml_file_content
 
     if element_path != ".":
-        path_list = element_path.split(".")
+        path_list = tuple(element_path.split("."))
         for key in path_list:
             if work_path[key] is None:
                 work_path[key] = {}

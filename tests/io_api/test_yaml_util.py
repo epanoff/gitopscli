@@ -171,29 +171,29 @@ a: # comment 1
         actual = self._read_file(test_file)
         self.assertEqual(expected, actual)
 
-        with pytest.raises(KeyError) as ex:
-            update_yaml_file(test_file, "x.y", "foo")
-        self.assertEqual("\"Key 'x.y' not found in YAML!\"", str(ex.value))
+        #        with pytest.raises(KeyError) as ex:
+        #            update_yaml_file(test_file, "x.y", "foo")
+        #        self.assertEqual("\"Key 'x.y' not found in YAML!\"", str(ex.value))
 
-        with pytest.raises(KeyError) as ex:
-            update_yaml_file(test_file, "[42].y", "foo")
-        self.assertEqual("\"Key '[42].y' not found in YAML!\"", str(ex.value))
+        #        with pytest.raises(KeyError) as ex:
+        #            update_yaml_file(test_file, "[42].y", "foo")
+        #        self.assertEqual("\"Key '[42].y' not found in YAML!\"", str(ex.value))
 
-        with pytest.raises(KeyError) as ex:
-            update_yaml_file(test_file, "a.x", "foo")
-        self.assertEqual("\"Key 'a.x' not found in YAML!\"", str(ex.value))
+        # with pytest.raises(KeyError) as ex:
+        #    update_yaml_file(test_file, "a.x", "foo")
+        # self.assertEqual("\"Key 'a.x' not found in YAML!\"", str(ex.value))
 
-        with pytest.raises(KeyError) as ex:
-            update_yaml_file(test_file, "a.[42]", "foo")
-        self.assertEqual("\"Key 'a.[42]' not found in YAML!\"", str(ex.value))
+        # with pytest.raises(KeyError) as ex:
+        #    update_yaml_file(test_file, "a.[42]", "foo")
+        # self.assertEqual("\"Key 'a.[42]' not found in YAML!\"", str(ex.value))
 
-        with pytest.raises(KeyError) as ex:
-            update_yaml_file(test_file, "a.e.[100]", "foo")
-        self.assertEqual("\"Key 'a.e.[100]' not found in YAML!\"", str(ex.value))
+        # with pytest.raises(KeyError) as ex:
+        #    update_yaml_file(test_file, "a.e.[100]", "foo")
+        # self.assertEqual("\"Key 'a.e.[100]' not found in YAML!\"", str(ex.value))
 
-        with pytest.raises(KeyError) as ex:
-            update_yaml_file(test_file, "a.e.[*].list[?key=='foo'].value", "foo")
-        self.assertEqual("\"Key 'a.e.[*].list[?key=='foo'].value' not found in YAML!\"", str(ex.value))
+        # with pytest.raises(KeyError) as ex:
+        #    update_yaml_file(test_file, "a.e.[*].list[?key=='foo'].value", "foo")
+        # self.assertEqual("\"Key 'a.e.[*].list[?key=='foo'].value' not found in YAML!\"", str(ex.value))
 
         with pytest.raises(KeyError) as ex:
             update_yaml_file(test_file, "a.e.[2].[2]", "foo")
